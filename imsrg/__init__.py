@@ -158,8 +158,10 @@ def _get_denom2(href, hh_classifier, ph_classifier, pp_classifier):
 
 IntegrateStats = namedtuple('IntegrateStats', 's fd E0 E2')
 
-def integrate_direct(href0, s_max, generator, reference, step_monitor=None, convergence_check=None):
+def integrate_direct(href0, s_max, generator, step_monitor=None, convergence_check=None):
     from scipy.integrate import ode
+
+    reference = href0.ref
 
     solver = ode(_flow_rhs(generator, reference))
     solver.set_integrator('vode')
@@ -193,8 +195,10 @@ def integrate_direct(href0, s_max, generator, reference, step_monitor=None, conv
     return solver.successful(), href, stats
 
 
-def integrate_magnus(href0, s_max, generator, reference, step_monitor=None, convergence_check=None):
+def integrate_magnus(href0, s_max, generator, step_monitor=None, convergence_check=None):
     from scipy.integrate import ode
+
+    reference = href0.ref
 
     solver = ode(_magnus_rhs(generator, href0, reference))
     solver.set_integrator('vode', atol=1e-6)
@@ -231,15 +235,17 @@ def integrate_magnus(href0, s_max, generator, reference, step_monitor=None, conv
     return solver.successful(), omega, href, stats
 
 
-def integrate_magnus_dopri(href0, s_max, generator, reference, step_monitor=None, convergence_check=None):
+def integrate_magnus_dopri(href0, s_max, generator, step_monitor=None, convergence_check=None):
     from scipy.integrate import ode
+
+    reference = href0.ref
 
     stats = IntegrateStats([], [], [], [])
 
     sdbasis = SDBasis(reference.basis, reference.nparticles)
 
     def solout(s, y):
-        nonlocal stats, sdbasis
+        nonlocal stats, sdbasis, reference
 
         omega = Operator.unpack(y, reference, symmetry='antihermitian')
         href = href0.bch(omega)
