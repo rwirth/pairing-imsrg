@@ -14,6 +14,11 @@ class Configuration:
         return iter(self.cf)
 
     def max_coincidence(self, other):
+        '''
+        Compute the maximum-coincidence representation of this SD and the given one.
+        Returns a 4-tuple (common, d1, d2, phase) containing the common sp states,
+        the states that are unique to this and the other SD, and the relative swap phase.
+        '''
         nparticles = len(self)
         if nparticles != len(other):
             raise ValueError('Configurations must have the same number of particles')
@@ -44,6 +49,8 @@ class Configuration:
 
 class SDBasis:
     def __init__(self, basis, nparticles):
+        '''Construct an SD basis adapted to the pairing Hamiltonian with only filled or empty levels.'''
+
         from itertools import combinations
 
         def levels_to_comb(lvls):

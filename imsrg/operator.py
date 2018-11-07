@@ -212,6 +212,8 @@ class Operator:
         o1o1_comm = np.dot(self.o1, other.o1) - np.dot(other.o1, self.o1)
 
         c2 = np.zeros((self.basis.ntpstates,self.basis.ntpstates))
+
+        # Local function for fine-grained profiling
         def _calc_c2():
             nonlocal c2
 
@@ -268,6 +270,8 @@ class Operator:
 
         # c1 multi-ref terms not implemented.
         c1 = o1o1_comm.copy()
+
+        # Local function for fine-grained profiling.
         def _calc_c1():
             nonlocal c1
             for (I, (p,r)), (J, (q,t)) in product(enumerate(self.basis.tpb), repeat=2):
