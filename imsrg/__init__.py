@@ -90,7 +90,7 @@ def _flow_rhs(generator, reference, hole_levels=None):
     return rhs
 
 
-def _magnus_rhs(generator, href0, reference, hole_levels=None):
+def _magnus_rhs(generator, href0, reference, hole_levels=None, rtol=1e-6):
     def rhs(s, y, href):
         omega = Operator.unpack(y, reference, symmetry='antihermitian')
         href = href0.bch(omega)
@@ -105,7 +105,7 @@ def _magnus_rhs(generator, href0, reference, hole_levels=None):
         termnorm0 = domegads.norm()
         termnorm = 1.
         m = 1
-        while termnorm > 1e-6:
+        while termnorm > rtol:
             domegads_term = omega.comm(domegads_term)
 
             coeff = next(coeffs)
