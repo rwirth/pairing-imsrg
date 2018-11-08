@@ -342,12 +342,12 @@ class Operator:
         return self
 
     def __add__(self, other):
-        return Operator(self.o0, self.o1, self.o2, self.ref).__iadd__(other)
+        return self.copy().__iadd__(other)
     def __sub__(self, other):
-        return Operator(self.o0, self.o1, self.o2, self.ref).__isub__(other)
+        return self.copy().__isub__(other)
     def __mul__(self, alpha):
-        return Operator(self.o0, self.o1, self.o2, self.ref).__imul__(alpha)
+        return self.copy().__imul__(alpha)
     def __rmul__(self, alpha):
         return self * alpha
     def __truediv__(self, alpha):
-        return Operator(self.o0, self.o1, self.o2, self.ref).__itruediv__(alpha)
+        return self.copy().__itruediv__(alpha)
